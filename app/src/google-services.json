@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1026101343960",
+    "project_id": "textextraction-99d76",
+    "storage_bucket": "textextraction-99d76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026101343960:android:3d54593b20168bb44149ad",
+        "android_client_info": {
+          "package_name": "com.example.imagerecog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1026101343960-2la3qg9a2vg764sfukem1l22mv9a48f0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC_CbtImeQPxAzeX10UEdksW9UkaynD4g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1026101343960-2la3qg9a2vg764sfukem1l22mv9a48f0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
