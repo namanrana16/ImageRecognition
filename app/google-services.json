@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "94719901765",
+    "project_id": "food-quality-9c9a7",
+    "storage_bucket": "food-quality-9c9a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94719901765:android:fd304f3a42100b7f41632c",
+        "android_client_info": {
+          "package_name": "com.example.imagerecog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94719901765-3nbd5hn7g057t39q33uokdnf1h0gep56.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsNdFPalPE3tse7vtTDgBnD1_bpM-dTpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94719901765-3nbd5hn7g057t39q33uokdnf1h0gep56.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
