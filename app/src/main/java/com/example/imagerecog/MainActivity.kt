@@ -2,6 +2,7 @@ package com.example.imagerecog
 
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -12,19 +13,22 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import com.google.mlkit.vision.common.InputImage as InputImage1
 
 typealias LumaListener = (luma: Double) -> Unit
 
 
 class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
-
+    val recognizer = TextRecognition.getClient()
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +51,9 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
+
+
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
@@ -63,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
-    private fun takePhoto() {
+     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
 
@@ -89,9 +96,37 @@ class MainActivity : AppCompatActivity() {
                     val msg = "Photo capture succeeded: $savedUri"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
+                    val image: InputImage1 = InputImage1.fromFilePath(applicationContext,savedUri)
+                    val result = recognizer.process(image)
+                            .addOnSuccessListener { visionText->
+                                // Task completed successfully
+                                // ...
+                                for (block in visionText.textBlocks) {
+                                    val boundingBox = block.boundingBox
+                                    val cornerPoints = block.cornerPoints
+                                    val text = block.text
+                                    Toast.makeText(baseContext, text, Toast.LENGTH_SHORT).show()
+                                    for (line in block.lines) {
+                                        // ...
+                                        for (element in line.elements) {
+                                            // ...
+                                        }
+                                    }
+                                }
+
+                            }
+                            .addOnFailureListener { e ->
+                                // Task failed with an exception
+                                // ...
+                            }
+                   
+
+
+
                 }
             })
     }
+
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -135,6 +170,8 @@ class MainActivity : AppCompatActivity() {
 
         }, ContextCompat.getMainExecutor(this))
     }
+
+
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
