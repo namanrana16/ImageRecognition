@@ -95,32 +95,90 @@ class MainActivity : AppCompatActivity() {
                     val savedUri = Uri.fromFile(photoFile)
                     val msg = "Photo capture succeeded: $savedUri"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+
                     Log.d(TAG, msg)
+                    var ingredients = mutableListOf<String>()
+                    var ingredientsText: String =""
+
                     val image: InputImage1 = InputImage1.fromFilePath(applicationContext,savedUri)
                     val result = recognizer.process(image)
                             .addOnSuccessListener { visionText->
                                 // Task completed successfully
                                 // ...
                                 for (block in visionText.textBlocks) {
+
                                     val boundingBox = block.boundingBox
                                     val cornerPoints = block.cornerPoints
                                     val text = block.text
-                                    Toast.makeText(baseContext, text, Toast.LENGTH_SHORT).show()
+                                   // Toast.makeText(baseContext, text, Toast.LENGTH_SHORT).show()
+                                    Log.i(String.toString(), text)
                                     for (line in block.lines) {
                                         // ...
+                                       // val elementText = line.text
+                                      //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
                                         for (element in line.elements) {
+                                            val elementText = element.text
+                                          //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
+                                            if (elementText=="INGREDIENTS:"||elementText=="Ingredients:") {
+                                                Toast.makeText(baseContext,"Found ingredients",Toast.LENGTH_SHORT).show()
+                                                ingredientsText=text
+                                            }
+
                                             // ...
                                         }
                                     }
                                 }
 
+                                var text: String
+                                var finalText=mutableListOf<String>()
+                                var t:Int
+                                t=ingredientsText.length
+                                var i:Int=0
+                                while(i!=t){
+                                    text = ""
+                                    for (k in i..t-1){
+                                        if (ingredientsText[k]==','){
+                                            break
+                                        }
+                                        if (ingredientsText[k]==' '){
+                                            continue
+                                        }
+
+                                        if (ingredientsText[k]=='.'){
+                                            break
+                                        }
+
+                                        if (ingredientsText[k]==':'){
+                                            break
+                                        }
+
+                                        text+=ingredientsText[k]
+                                        i=k
+                                    }
+                                    i++
+                                    finalText.add(text)
+
+                                }
+                                var finalText2=mutableListOf<String>()
+                                finalText.remove(" ")
+                                var k=0
+                                for (i in 0..finalText.size-1){
+                                    if (finalText[i]==""||finalText[i]=="Ingredients"){
+                                        continue
+                                    }
+                                    finalText2.add(finalText[i])
+                                    k++
+                                }
+
+                   for (i in finalText2) {
+                       Toast.makeText(baseContext, i, Toast.LENGTH_SHORT).show()
+                   }
                             }
                             .addOnFailureListener { e ->
                                 // Task failed with an exception
                                 // ...
                             }
                    
-
 
 
                 }
