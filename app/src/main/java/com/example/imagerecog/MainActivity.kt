@@ -3,6 +3,7 @@ package com.example.imagerecog
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.text.TextRecognition
@@ -111,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                                     val cornerPoints = block.cornerPoints
                                     val text = block.text
                                    // Toast.makeText(baseContext, text, Toast.LENGTH_SHORT).show()
-                                    Log.i(String.toString(), text)
+                                    Log.i(toString(), text)
                                     for (line in block.lines) {
                                         // ...
                                        // val elementText = line.text
@@ -131,8 +133,7 @@ class MainActivity : AppCompatActivity() {
 
                                 var text: String
                                 var finalText=mutableListOf<String>()
-                                var t:Int
-                                t=ingredientsText.length
+                                val t:Int = ingredientsText.length
                                 var i:Int=0
                                 while(i!=t){
                                     text = ""
@@ -180,7 +181,7 @@ class MainActivity : AppCompatActivity() {
                             }
                    
 
-
+                        list()
                 }
             })
     }
@@ -254,4 +255,12 @@ class MainActivity : AppCompatActivity() {
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
+
+    fun list()
+    {
+        val intent = Intent(this, MainActivity2::class.java)
+        startActivity(intent)
+    }
+
+
 }
