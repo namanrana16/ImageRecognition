@@ -2,7 +2,6 @@ package com.example.imagerecog
 
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -12,18 +11,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
-
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.imagerecog.dummy.DummyContent
 import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
 import com.google.mlkit.vision.common.InputImage as InputImage1
+import kotlin.collections.mutableListOf as mutableListOf1
 
 typealias LumaListener = (luma: Double) -> Unit
 
@@ -31,6 +31,7 @@ typealias LumaListener = (luma: Double) -> Unit
 class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     val recognizer = TextRecognition.getClient()
+    var listIng= ArrayList<String>()
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,14 +40,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         fun onRequestPermissionsResult(
             requestCode: Int, permissions: Array<String>, grantResults:
-            IntArray) {
+            IntArray
+        ) {
             if (requestCode == REQUEST_CODE_PERMISSIONS) {
                 if (allPermissionsGranted()) {
                     startCamera()
                 } else {
-                    Toast.makeText(this,
+                    Toast.makeText(
+                        this,
                         "Permissions not granted by the user.",
-                        Toast.LENGTH_SHORT).show()
+                        Toast.LENGTH_SHORT
+                    ).show()
                     finish()
                 }
             }
@@ -61,7 +65,8 @@ class MainActivity : AppCompatActivity() {
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
         }
 
         // Set up the listener for take photo button
@@ -79,8 +84,10 @@ class MainActivity : AppCompatActivity() {
         // Create time-stamped output file to hold the image
         val photoFile = File(
             outputDirectory,
-            SimpleDateFormat(FILENAME_FORMAT, Locale.US
-            ).format(System.currentTimeMillis()) + ".jpg")
+            SimpleDateFormat(
+                FILENAME_FORMAT, Locale.US
+            ).format(System.currentTimeMillis()) + ".jpg"
+        )
 
         // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -88,102 +95,131 @@ class MainActivity : AppCompatActivity() {
         // Set up image capture listener, which is triggered after photo has
         // been taken
         imageCapture.takePicture(
-            outputOptions, ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageSavedCallback {
+            outputOptions,
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
 
-                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                override public fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
                     val msg = "Photo capture succeeded: $savedUri"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 
                     Log.d(TAG, msg)
-                    var ingredients = mutableListOf<String>()
-                    var ingredientsText: String =""
+                    var ingredients = mutableListOf1<String>()
+                    var ingredientsText: String = ""
 
-                    val image: InputImage1 = InputImage1.fromFilePath(applicationContext,savedUri)
+                    val image: InputImage1 = InputImage1.fromFilePath(applicationContext, savedUri)
                     val result = recognizer.process(image)
-                            .addOnSuccessListener { visionText->
-                                // Task completed successfully
-                                // ...
-                                for (block in visionText.textBlocks) {
+                        .addOnSuccessListener { visionText ->
+                            // Task completed successfully
+                            // ...
+                            for (block in visionText.textBlocks) {
 
-                                    val boundingBox = block.boundingBox
-                                    val cornerPoints = block.cornerPoints
-                                    val text = block.text
-                                   // Toast.makeText(baseContext, text, Toast.LENGTH_SHORT).show()
-                                    Log.i(toString(), text)
-                                    for (line in block.lines) {
+                                val boundingBox = block.boundingBox
+                                val cornerPoints = block.cornerPoints
+                                val text = block.text
+                                // Toast.makeText(baseContext, text, Toast.LENGTH_SHORT).show()
+                                Log.i(toString(), text)
+                                for (line in block.lines) {
+                                    // ...
+                                    // val elementText = line.text
+                                    //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
+                                    for (element in line.elements) {
+                                        val elementText = element.text
+                                        //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
+                                        if (elementText == "INGREDIENTS:" || elementText == "Ingredients:") {
+                                            Toast.makeText(
+                                                baseContext,
+                                                "Found ingredients",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            ingredientsText = text
+                                        }
+
                                         // ...
-                                       // val elementText = line.text
-                                      //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
-                                        for (element in line.elements) {
-                                            val elementText = element.text
-                                          //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
-                                            if (elementText=="INGREDIENTS:"||elementText=="Ingredients:") {
-                                                Toast.makeText(baseContext,"Found ingredients",Toast.LENGTH_SHORT).show()
-                                                ingredientsText=text
-                                            }
-
-                                            // ...
-                                        }
                                     }
                                 }
+                            }
 
-                                var text: String
-                                var finalText=mutableListOf<String>()
-                                val t:Int = ingredientsText.length
-                                var i:Int=0
-                                while(i!=t){
-                                    text = ""
-                                    for (k in i..t-1){
-                                        if (ingredientsText[k]==','){
-                                            break
-                                        }
-                                        if (ingredientsText[k]==' '){
-                                            continue
-                                        }
-
-                                        if (ingredientsText[k]=='.'){
-                                            break
-                                        }
-
-                                        if (ingredientsText[k]==':'){
-                                            break
-                                        }
-
-                                        text+=ingredientsText[k]
-                                        i=k
+                            var text: String
+                            val finalText = ArrayList<String>()
+                            val t: Int = ingredientsText.length
+                            var i: Int = 0
+                            while (i != t) {
+                                text = ""
+                                for (k in i..t - 1) {
+                                    if (ingredientsText[k] == ',') {
+                                        break
                                     }
-                                    i++
-                                    finalText.add(text)
-
-                                }
-                                var finalText2=mutableListOf<String>()
-                                finalText.remove(" ")
-                                var k=0
-                                for (i in 0..finalText.size-1){
-                                    if (finalText[i]==""||finalText[i]=="Ingredients"){
+                                    if (ingredientsText[k] == ' ') {
                                         continue
                                     }
-                                    finalText2.add(finalText[i])
-                                    k++
+
+                                    if (ingredientsText[k] == '.') {
+                                        break
+                                    }
+
+                                    if (ingredientsText[k] == ':') {
+                                        break
+                                    }
+
+                                    text += ingredientsText[k]
+                                    i = k
                                 }
+                                i++
+                                finalText.add(text)
 
-                   for (i in finalText2) {
-                       Toast.makeText(baseContext, i, Toast.LENGTH_SHORT).show()
-                   }
                             }
-                            .addOnFailureListener { e ->
-                                // Task failed with an exception
-                                // ...
+                            val finalText2 = ArrayList<String>()
+                            finalText.remove(" ")
+                            var k = 0
+                            for (i in 0..finalText.size - 1) {
+                                if (finalText[i] == "" || finalText[i] == "Ingredients") {
+                                    continue
+                                }
+                                finalText2.add(finalText[i])
+                                k++
                             }
-                   
+                                listIng = finalText2
+                            for (i in finalText2) {
+                                Toast.makeText(baseContext, i, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            // Task failed with an exception
+                            // ...
+                        }
 
-                        list()
+
+                    list()
                 }
             })
+    }
+  
+    
+   public fun list()
+    {
+        val intent = Intent(this, MainActivity2::class.java)
+        val bundle = Bundle()
+        bundle.putParcelableArrayList("mylist",listIng)
+        intent.putExtras(bundle)
+        startActivity(intent)
+
+        val intent2 = Intent(this, MyItemRecyclerViewAdapter::class.java)
+        val bundle2 = Bundle()
+        bundle2.putParcelableArrayList("mylist",listIng)
+        intent.putExtras(bundle2)
+        startActivity(intent2)
+
+
+        val intent3 = Intent(this, DummyContent::class.java)
+        val bundle3 = Bundle()
+        bundle3.putParcelableArrayList("mylist",listIng)
+        intent.putExtras(bundle3)
+        startActivity(intent3)
     }
 
 
@@ -221,9 +257,10 @@ class MainActivity : AppCompatActivity() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture, imageAnalyzer)
+                    this, cameraSelector, preview, imageCapture, imageAnalyzer
+                )
 
-            } catch(exc: Exception) {
+            } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
@@ -234,7 +271,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            baseContext, it) == PackageManager.PERMISSION_GRANTED
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun getOutputDirectory(): File {
@@ -256,11 +294,15 @@ class MainActivity : AppCompatActivity() {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 
-    fun list()
-    {
-        val intent = Intent(this, MainActivity2::class.java)
-        startActivity(intent)
-    }
+
 
 
 }
+
+private fun Bundle.putParcelableArrayList(s: String, listIng: ArrayList<String>) {
+
+}
+
+
+
+
