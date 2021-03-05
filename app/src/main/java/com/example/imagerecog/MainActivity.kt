@@ -13,7 +13,6 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.imagerecog.dummy.DummyContent
 import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -208,18 +207,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtras(bundle)
         startActivity(intent)
 
-        val intent2 = Intent(this, MyItemRecyclerViewAdapter::class.java)
-        val bundle2 = Bundle()
-        bundle2.putParcelableArrayList("mylist",listIng)
-        intent.putExtras(bundle2)
-        startActivity(intent2)
 
-
-        val intent3 = Intent(this, DummyContent::class.java)
-        val bundle3 = Bundle()
-        bundle3.putParcelableArrayList("mylist",listIng)
-        intent.putExtras(bundle3)
-        startActivity(intent3)
     }
 
 
