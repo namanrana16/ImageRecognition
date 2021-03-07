@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -138,6 +139,7 @@ class MainActivity : AppCompatActivity() {
                                             ingredientsText = text
                                         }
 
+
                                         // ...
                                     }
                                 }
@@ -164,6 +166,18 @@ class MainActivity : AppCompatActivity() {
                                     if (ingredientsText[k] == ':') {
                                         break
                                     }
+                                    if (k>3){
+                                        if (ingredientsText[k-1]==' '&&ingredientsText[k]=='a'&&ingredientsText[k+1]=='n'&&ingredientsText[k+2]=='d'&&ingredientsText[k+3]==' '){
+                                            break
+                                        }
+                                        if (ingredientsText[k-2]==' '&&ingredientsText[k-1]=='a'&&ingredientsText[k]=='n'&&ingredientsText[k+1]=='d'&&ingredientsText[k+2]==' '){
+                                            break
+                                        }
+                                        if (ingredientsText[k-3]==' '&&ingredientsText[k-2]=='a'&&ingredientsText[k-1]=='n'&&ingredientsText[k]=='d'&&ingredientsText[k+1]==' '){
+                                            break
+                                        }
+
+                                    }
 
                                     text += ingredientsText[k]
                                     i = k
@@ -183,9 +197,10 @@ class MainActivity : AppCompatActivity() {
                                 k++
                             }
                                 listIng = finalText2
-                            for (i in finalText2) {
-                                Toast.makeText(baseContext, i, Toast.LENGTH_SHORT).show()
-                            }
+                                list()
+                          /*  for (i in finalText2) {
+                               Toast.makeText(baseContext, i, Toast.LENGTH_SHORT).show()
+                            }*/
                         }
                         .addOnFailureListener { e ->
                             // Task failed with an exception
@@ -193,20 +208,19 @@ class MainActivity : AppCompatActivity() {
                         }
 
 
-                    list()
+
                 }
             })
     }
   
     
-   public fun list()
+   fun list()
     {
         val intent = Intent(this, MainActivity2::class.java)
         val bundle = Bundle()
-        bundle.putParcelableArrayList("mylist",listIng)
-        intent.putExtras(bundle)
+        bundle.putSerializable("myList", listIng)
+        intent.putExtra("BUNDLE",bundle)
         startActivity(intent)
-
 
     }
 
@@ -287,9 +301,7 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-private fun Bundle.putParcelableArrayList(s: String, listIng: ArrayList<String>) {
 
-}
 
 
 
