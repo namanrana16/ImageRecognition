@@ -105,11 +105,12 @@ class MainActivity : AppCompatActivity() {
                 override public fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
                     val msg = "Photo capture succeeded: $savedUri"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                   // Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 
                     Log.d(TAG, msg)
                     var ingredients = mutableListOf1<String>()
                     var ingredientsText: String = ""
+                    var flag:Int = 0
 
                     val image: InputImage1 = InputImage1.fromFilePath(applicationContext, savedUri)
                     val result = recognizer.process(image)
@@ -123,27 +124,43 @@ class MainActivity : AppCompatActivity() {
                                 val text = block.text
                                 // Toast.makeText(baseContext, text, Toast.LENGTH_SHORT).show()
                                 Log.i(toString(), text)
+                                if (flag==100){
+                                        ingredientsText=text
+                                    break
+
+                                }
+
                                 for (line in block.lines) {
                                     // ...
                                     // val elementText = line.text
                                     //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
+                                        /*if (line.text=="Ingredients") {
+                                            break
+                                        }*/
+                                            //Toast.makeText(baseContext, line.text, Toast.LENGTH_SHORT).show()
                                     for (element in line.elements) {
                                         val elementText = element.text
-                                        //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
+                                       // Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
                                         if (elementText == "INGREDIENTS:" || elementText == "Ingredients:") {
-                                            Toast.makeText(
-                                                baseContext,
-                                                "Found ingredients",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                           // Toast.makeText(baseContext, "Found ingredients", Toast.LENGTH_SHORT).show()
                                             ingredientsText = text
                                         }
+                                        if (ingredientsText=="Ingredients:"){
+                                            flag=100
+                                        }
+
 
 
                                         // ...
                                     }
                                 }
+
                             }
+
+                            Toast.makeText(
+                                baseContext, ingredientsText,
+                                Toast.LENGTH_SHORT
+                            ).show()
 
                             var text: String
                             val finalText = ArrayList<String>()
