@@ -1,2 +1,3 @@
+include ':ingredientAnalyzer'
 include ':app'
 rootProject.name = "ImageRecog"

@@ -13,6 +13,7 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+
 import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     finish()
+
                 }
             }
         }
@@ -161,7 +163,7 @@ class MainActivity : AppCompatActivity() {
                                 baseContext, ingredientsText,
                                 Toast.LENGTH_SHORT
                             ).show()
-
+Log.i(String.toString(), ingredientsText)
                             var text: String
                             val finalText = ArrayList<String>()
                             val t: Int = ingredientsText.length
@@ -169,9 +171,20 @@ class MainActivity : AppCompatActivity() {
                             while (i != t) {
                                 text = ""
                                 for (k in i..t - 1) {
+
+                                        if (k>3&&ingredientsText[k-1]==' '&&ingredientsText[k]=='a'&&ingredientsText[k+1]=='n'&&ingredientsText[k+2]=='d'&&(ingredientsText[k+3]==' '||ingredientsText[k+3].isUpperCase())){
+                                            break
+                                        }
+                                        if (k>3&&ingredientsText[k-2]==' '&&ingredientsText[k-1]=='a'&&ingredientsText[k]=='n'&&ingredientsText[k+1]=='d'&&(ingredientsText[k+2]==' '||ingredientsText[k+2].isUpperCase())){
+                                            break
+                                        }
+                                        if (k>3&&ingredientsText[k-3]==' '&&ingredientsText[k-2]=='a'&&ingredientsText[k-1]=='n'&&ingredientsText[k]=='d'&&(ingredientsText[k+1]==' '||ingredientsText[k+1].isUpperCase())){
+                                            break
+                                        }
                                     if (ingredientsText[k] == ',') {
                                         break
                                     }
+
                                     if (ingredientsText[k] == ' ') {
                                         continue
                                     }
@@ -183,18 +196,7 @@ class MainActivity : AppCompatActivity() {
                                     if (ingredientsText[k] == ':') {
                                         break
                                     }
-                                    if (k>3){
-                                        if (ingredientsText[k-1]==' '&&ingredientsText[k]=='a'&&ingredientsText[k+1]=='n'&&ingredientsText[k+2]=='d'&&ingredientsText[k+3]==' '){
-                                            break
-                                        }
-                                        if (ingredientsText[k-2]==' '&&ingredientsText[k-1]=='a'&&ingredientsText[k]=='n'&&ingredientsText[k+1]=='d'&&ingredientsText[k+2]==' '){
-                                            break
-                                        }
-                                        if (ingredientsText[k-3]==' '&&ingredientsText[k-2]=='a'&&ingredientsText[k-1]=='n'&&ingredientsText[k]=='d'&&ingredientsText[k+1]==' '){
-                                            break
-                                        }
 
-                                    }
 
                                     text += ingredientsText[k]
                                     i = k
@@ -317,6 +319,7 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+
 
 
 
