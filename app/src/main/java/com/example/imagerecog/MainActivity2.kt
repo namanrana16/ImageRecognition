@@ -1,32 +1,16 @@
 package com.example.imagerecog
 
 
+
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.ingredientanalyzer.Ingredients
 import kotlinx.android.synthetic.main.activity_main2.*
-
-
-private val itemMap = mapOf<String, Int>(
-        "Sugar" to 3,
-        "Wheat Protein" to 6,
-        "Salt" to 7,
-        "Maida" to 3,
-        "Yeast" to 5,
-        "Atta" to 10,
-        "Preservative" to 0
-    ).withDefault { 0 }
-
-
-
-
-fun foodValue(item: String): Int {
-
-    return itemMap.getValue(item)
-}
+import java.text.DecimalFormat
 
 
 class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
@@ -43,10 +27,13 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
 
         var avg:Float= 0F
         for (i in list){
-            val rating:Int= foodValue(i)
+            val rating:Int= com.example.ingredientanalyzer.Ingredients.value(i)
             avg+=rating
         }
         avg/=list.size
+        var df = DecimalFormat("#.##")
+        avg=df.format(avg).toFloat()
+
 
       /*  for (i in list) {
             Toast.makeText(baseContext, "I found $i", Toast.LENGTH_SHORT).show()
@@ -56,7 +43,7 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
         val adaptor= IngredientsListAdaptor(list, this)
         recyclerView.adapter=adaptor
         val ratingText=findViewById<TextView>(R.id.ratingValue)
-        ratingText.text=avg.toString()
+        ratingText.text="$avg/10"
         if (avg>5){
             ratingText.setTextColor(Color.parseColor("#00FF00"))
         }

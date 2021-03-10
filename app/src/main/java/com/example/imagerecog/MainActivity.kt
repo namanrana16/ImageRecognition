@@ -31,6 +31,9 @@ typealias LumaListener = (luma: Double) -> Unit
 
 class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
+    lateinit var savedUri: Uri
+
+
     val recognizer = TextRecognition.getClient()
     var listIng= ArrayList<String>()
     private lateinit var outputDirectory: File
@@ -105,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override public fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val savedUri = Uri.fromFile(photoFile)
+                    savedUri = Uri.fromFile(photoFile)
                     val msg = "Photo capture succeeded: $savedUri"
                    // Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 
@@ -114,12 +117,19 @@ class MainActivity : AppCompatActivity() {
                     var ingredientsText: String = ""
                     var flag:Int = 0
 
-                    val image: InputImage1 = InputImage1.fromFilePath(applicationContext, savedUri)
-                    val result = recognizer.process(image)
+                    move()
+
+                    val image:InputImage1= InputImage1.fromFilePath(applicationContext, savedUri)
+
+
+
+
+
+                        val result = recognizer.process(image)
                         .addOnSuccessListener { visionText ->
                             // Task completed successfully
                             // ...
-                            for (block in visionText.textBlocks) {
+                          /*  for (block in visionText.textBlocks) {
 
                                 val boundingBox = block.boundingBox
                                 val cornerPoints = block.cornerPoints
@@ -163,7 +173,7 @@ class MainActivity : AppCompatActivity() {
                                 baseContext, ingredientsText,
                                 Toast.LENGTH_SHORT
                             ).show()
-Log.i(String.toString(), ingredientsText)
+                            Log.i(String.toString(), ingredientsText)
                             var text: String
                             val finalText = ArrayList<String>()
                             val t: Int = ingredientsText.length
@@ -216,7 +226,7 @@ Log.i(String.toString(), ingredientsText)
                                 k++
                             }
                                 listIng = finalText2
-                                list()
+                                list()*/
                           /*  for (i in finalText2) {
                                Toast.makeText(baseContext, i, Toast.LENGTH_SHORT).show()
                             }*/
@@ -241,6 +251,11 @@ Log.i(String.toString(), ingredientsText)
         intent.putExtra("BUNDLE",bundle)
         startActivity(intent)
 
+    }
+    fun move(){
+        val intent = Intent(this, ImageCaptured::class.java)
+        intent.putExtra("imageUri", savedUri);
+        startActivity(intent)
     }
 
 

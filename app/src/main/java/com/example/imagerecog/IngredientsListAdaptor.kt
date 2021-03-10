@@ -1,5 +1,6 @@
 package com.example.imagerecog
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,18 @@ class IngredientsListAdaptor(private val items: ArrayList<String>, private val l
     override fun onBindViewHolder(holder: IngredientsViewHolder, position: Int) {
         val currentItem=items[position]
         holder.titleView.text=currentItem
+        val currentItem2=currentItem.replace("\\s".toRegex(), "")
+        val rating:Int= com.example.ingredientanalyzer.Ingredients.value(currentItem2)
+        if (rating>5){
+            holder.titleView.setBackgroundColor(Color.parseColor("#00FF00"))
+        }
+        else if(rating<5){
+            holder.titleView.setBackgroundColor(Color.parseColor("#FF0000"))
+        }
+        else {
+            holder.titleView.setBackgroundColor(Color.parseColor("#FF5722"))
+        }
+
     }
 
     override fun getItemCount(): Int {
