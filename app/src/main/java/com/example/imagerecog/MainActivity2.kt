@@ -64,7 +64,7 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
                 inputListFinal+=i.toLowerCase()
                 continue
             }
-            if (i==','||i=='('||i==')'||i.isDigit()||i==':') continue
+            if (i==','||i=='('||i==')'||i.isDigit()||i==':'||i=='.') continue
             inputListFinal+=i
         }
         inputListFinal.trim()
