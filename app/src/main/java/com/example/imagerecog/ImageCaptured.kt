@@ -14,6 +14,7 @@ import java.io.File
 class ImageCaptured : AppCompatActivity() {
     var savedUri:Uri?=null
     var listIng= ArrayList<String>()
+    var ingredientsText: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_captured)
@@ -31,7 +32,7 @@ class ImageCaptured : AppCompatActivity() {
 
 
         var flag:Int = 0
-        var ingredientsText: String = ""
+
 
         val result = recognizer.process(image)
             .addOnSuccessListener { visionText ->
@@ -151,6 +152,7 @@ class ImageCaptured : AppCompatActivity() {
         val intent = Intent(this, MainActivity2::class.java)
         val bundle = Bundle()
         bundle.putSerializable("myList", listIng)
+        bundle.putSerializable("inputList", ingredientsText)
         intent.putExtra("BUNDLE", bundle)
         val file: File = File(savedUri?.getPath())
         file.delete()

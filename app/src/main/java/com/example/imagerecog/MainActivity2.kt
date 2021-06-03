@@ -19,6 +19,7 @@ import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import java.text.DecimalFormat
 import android.text.TextUtils
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import org.tensorflow.lite.Interpreter
 import java.util.*
@@ -46,6 +47,7 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
         val intent = intent
         val args = intent.getBundleExtra("BUNDLE")
         val list = args!!.getSerializable("myList") as ArrayList<String>
+        var inputList= args!!.getSerializable("inputList") as String
 
         recyclerView.layoutManager= LinearLayoutManager(this)
         var finallist:String=""
@@ -54,7 +56,18 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
             finallist+=i
             finallist+=" "
         }
-        finallist.toLowerCase().trim()
+        var inputListFinal:String=""
+
+        val len = inputList.length
+        for (i in inputList){
+            if (i.isUpperCase()){
+                inputListFinal+=i.toLowerCase()
+                continue
+            }
+            if (i==','||i=='('||i==')'||i.isDigit()||i==':') continue
+            inputListFinal+=i
+        }
+        inputListFinal.trim()
 
 
         var flag:Int = 0
@@ -84,14 +97,15 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
             val ratingText=findViewById<TextView>(R.id.ratingValue)
             recyclerView.adapter=adaptor
 
-            if ( !TextUtils.isEmpty( finallist ) ){
+            if ( !TextUtils.isEmpty( inputListFinal ) ){
                 // Tokenize and pad the given input text.
-                val tokenizedMessage = classifier.tokenize( finallist )
+                    Log.i("FINALLLL", inputListFinal)
+                val tokenizedMessage = classifier.tokenize( inputListFinal )
                 val paddedMessage = classifier.padSequence( tokenizedMessage )
 
                 val results = classifySequence( paddedMessage )
                 val rating  = results.indexOf(results.max()!!)
-                Toast.makeText(this,finallist,Toast.LENGTH_LONG
+                Toast.makeText(this,inputListFinal,Toast.LENGTH_LONG
                     ).show()
                 ratingText.text = "${rating+1}/10"
             }
