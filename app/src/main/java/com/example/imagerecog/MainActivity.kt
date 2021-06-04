@@ -13,6 +13,7 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+
 import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -30,6 +31,9 @@ typealias LumaListener = (luma: Double) -> Unit
 
 class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
+    lateinit var savedUri: Uri
+
+
     val recognizer = TextRecognition.getClient()
     var listIng= ArrayList<String>()
     private lateinit var outputDirectory: File
@@ -52,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     finish()
+
                 }
             }
         }
@@ -103,48 +108,72 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override public fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val savedUri = Uri.fromFile(photoFile)
+                    savedUri = Uri.fromFile(photoFile)
                     val msg = "Photo capture succeeded: $savedUri"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                   // Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 
                     Log.d(TAG, msg)
                     var ingredients = mutableListOf1<String>()
                     var ingredientsText: String = ""
+                    var flag:Int = 0
 
-                    val image: InputImage1 = InputImage1.fromFilePath(applicationContext, savedUri)
-                    val result = recognizer.process(image)
+                    move()
+
+                    val image:InputImage1= InputImage1.fromFilePath(applicationContext, savedUri)
+
+
+
+
+
+                        val result = recognizer.process(image)
                         .addOnSuccessListener { visionText ->
                             // Task completed successfully
                             // ...
-                            for (block in visionText.textBlocks) {
+                          /*  for (block in visionText.textBlocks) {
 
                                 val boundingBox = block.boundingBox
                                 val cornerPoints = block.cornerPoints
                                 val text = block.text
                                 // Toast.makeText(baseContext, text, Toast.LENGTH_SHORT).show()
                                 Log.i(toString(), text)
+                                if (flag==100){
+                                        ingredientsText=text
+                                    break
+
+                                }
+
                                 for (line in block.lines) {
                                     // ...
                                     // val elementText = line.text
                                     //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
+                                        /*if (line.text=="Ingredients") {
+                                            break
+                                        }*/
+                                            //Toast.makeText(baseContext, line.text, Toast.LENGTH_SHORT).show()
                                     for (element in line.elements) {
                                         val elementText = element.text
-                                        //  Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
+                                       // Toast.makeText(baseContext, elementText, Toast.LENGTH_SHORT).show()
                                         if (elementText == "INGREDIENTS:" || elementText == "Ingredients:") {
-                                            Toast.makeText(
-                                                baseContext,
-                                                "Found ingredients",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                           // Toast.makeText(baseContext, "Found ingredients", Toast.LENGTH_SHORT).show()
                                             ingredientsText = text
                                         }
+                                        if (ingredientsText=="Ingredients:"){
+                                            flag=100
+                                        }
+
 
 
                                         // ...
                                     }
                                 }
+
                             }
 
+                            Toast.makeText(
+                                baseContext, ingredientsText,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.i(String.toString(), ingredientsText)
                             var text: String
                             val finalText = ArrayList<String>()
                             val t: Int = ingredientsText.length
@@ -152,9 +181,20 @@ class MainActivity : AppCompatActivity() {
                             while (i != t) {
                                 text = ""
                                 for (k in i..t - 1) {
+
+                                        if (k>3&&ingredientsText[k-1]==' '&&ingredientsText[k]=='a'&&ingredientsText[k+1]=='n'&&ingredientsText[k+2]=='d'&&(ingredientsText[k+3]==' '||ingredientsText[k+3].isUpperCase())){
+                                            break
+                                        }
+                                        if (k>3&&ingredientsText[k-2]==' '&&ingredientsText[k-1]=='a'&&ingredientsText[k]=='n'&&ingredientsText[k+1]=='d'&&(ingredientsText[k+2]==' '||ingredientsText[k+2].isUpperCase())){
+                                            break
+                                        }
+                                        if (k>3&&ingredientsText[k-3]==' '&&ingredientsText[k-2]=='a'&&ingredientsText[k-1]=='n'&&ingredientsText[k]=='d'&&(ingredientsText[k+1]==' '||ingredientsText[k+1].isUpperCase())){
+                                            break
+                                        }
                                     if (ingredientsText[k] == ',') {
                                         break
                                     }
+
                                     if (ingredientsText[k] == ' ') {
                                         continue
                                     }
@@ -166,18 +206,7 @@ class MainActivity : AppCompatActivity() {
                                     if (ingredientsText[k] == ':') {
                                         break
                                     }
-                                    if (k>3){
-                                        if (ingredientsText[k-1]==' '&&ingredientsText[k]=='a'&&ingredientsText[k+1]=='n'&&ingredientsText[k+2]=='d'&&ingredientsText[k+3]==' '){
-                                            break
-                                        }
-                                        if (ingredientsText[k-2]==' '&&ingredientsText[k-1]=='a'&&ingredientsText[k]=='n'&&ingredientsText[k+1]=='d'&&ingredientsText[k+2]==' '){
-                                            break
-                                        }
-                                        if (ingredientsText[k-3]==' '&&ingredientsText[k-2]=='a'&&ingredientsText[k-1]=='n'&&ingredientsText[k]=='d'&&ingredientsText[k+1]==' '){
-                                            break
-                                        }
 
-                                    }
 
                                     text += ingredientsText[k]
                                     i = k
@@ -197,7 +226,7 @@ class MainActivity : AppCompatActivity() {
                                 k++
                             }
                                 listIng = finalText2
-                                list()
+                                list()*/
                           /*  for (i in finalText2) {
                                Toast.makeText(baseContext, i, Toast.LENGTH_SHORT).show()
                             }*/
@@ -222,6 +251,11 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("BUNDLE",bundle)
         startActivity(intent)
 
+    }
+    fun move(){
+        val intent = Intent(this, ImageCaptured::class.java)
+        intent.putExtra("imageUri", savedUri);
+        startActivity(intent)
     }
 
 
@@ -300,6 +334,7 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+
 
 
 
