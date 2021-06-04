@@ -34,6 +34,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        aaptOptions {
+            noCompress "tflite"
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -48,6 +51,7 @@ android {
 
 dependencies {
 
+
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.31'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -58,6 +62,16 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite:1.13.1'
     implementation 'org.tensorflow:tensorflow-lite-support:0.1.0-rc1'
     implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0-rc1'
+=======
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.32'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0-rc1'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0-rc2'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:2.2.0'
+
     def camerax_version = "1.0.0-beta07"
 // CameraX core library using camera2 implementation
     implementation "androidx.camera:camera-camera2:1.1.0-alpha02"

@@ -2,21 +2,33 @@ package com.example.imagerecog
 
 
 
+
 import android.app.ProgressDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
+=======
+import android.app.ProgressDialog
+import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
+
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ingredientanalyzer.Ingredients
 import kotlinx.android.synthetic.main.activity_main2.*
+
+=======
+import org.tensorflow.lite.Interpreter
+
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
+
 import java.text.DecimalFormat
 import android.text.TextUtils
 import android.util.Log
@@ -24,6 +36,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.tensorflow.lite.Interpreter
 import java.util.*
 import kotlinx.android.synthetic.main.activity_main.*
+=======
+
 import java.util.*
 
 
@@ -38,10 +52,30 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
 
     val classifier = Classifier( this , "word_dict.json" , INPUT_MAXLEN )
 
+
+=======
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
+
+        tfLiteInterpreter = Interpreter( loadModelFile() )
+
+        // Start vocab processing, show a ProgressDialog to the user.
+        val progressDialog = ProgressDialog( this )
+        progressDialog.setMessage( "Parsing word_dict.json ..." )
+        progressDialog.setCancelable( false )
+        progressDialog.show()
+        classifier.processVocab( object: Classifier.VocabCallback {
+            override fun onVocabProcessed() {
+                // Processing done, dismiss the progressDialog.
+                progressDialog.dismiss()
+            }
+        })
+
 
 
         val intent = intent
@@ -50,6 +84,7 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
         var inputList= args!!.getSerializable("inputList") as String
 
         recyclerView.layoutManager= LinearLayoutManager(this)
+
         var finallist:String=""
        // var avg:Float= 0F
         for (i in list){
@@ -122,12 +157,62 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
             Toast.makeText(baseContext, "I found $i", Toast.LENGTH_SHORT).show()
         }*/
       //  val items = fetchData()
+=======
+        val finalList = "wheat"
+
+        finalList.trim()
+        Log.i("final", finalList)
+       if ( !TextUtils.isEmpty( finalList ) ){
+            // Tokenize and pad the given input text.
+            val tokenizedMessage = classifier.tokenize( finalList )
+            val paddedMessage = classifier.padSequence( tokenizedMessage )
+
+            val results = classifySequence( paddedMessage )
+            val rating  = results.indexOf(results.max()!!)
+            result_text.text = "RATING IS ${rating+1}"
+        }
+        else{
+            Toast.makeText( this@MainActivity2, "Please enter a message.", Toast.LENGTH_LONG).show();
+        }
+
+        //  val items = fetchData()
+        val adaptor= IngredientsListAdaptor(list as ArrayList<String>, this)
+        recyclerView.adapter=adaptor
+ 
 
 
 
      //   ratingText.text="$avg/10"
      /*   if (avg>5){
             ratingText.setTextColor(Color.parseColor("#00FF00"))
+=======
+
+
+    @Throws(IOException::class)
+    private fun loadModelFile(): MappedByteBuffer {
+        val assetFileDescriptor = assets.openFd(MODEL_ASSETS_PATH)
+        val fileInputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
+        val fileChannel = fileInputStream.channel
+        val startOffset = assetFileDescriptor.startOffset
+        val declaredLength = assetFileDescriptor.declaredLength
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+    }
+
+    // Perform inference, given the input sequence.
+    private fun classifySequence (sequence : IntArray ): FloatArray {
+        // Input shape -> ( 1 , INPUT_MAXLEN )
+        val inputs : Array<FloatArray> = arrayOf( sequence.map { it.toFloat() }.toFloatArray() )
+        // Output shape -> ( 1 , 2 ) ( as numClasses = 2 )
+        val outputs : Array<FloatArray> = arrayOf( FloatArray( 10 ) )
+        tfLiteInterpreter?.run( inputs , outputs )
+        return outputs[0]
+    }
+
+  /* private fun fetchData():ArrayList<String>{
+        val list = ArrayList<String>()
+        for ( i in 0 until 100){
+            list.add("Item $i")
+ 
         }
         else {
             ratingText.setTextColor(Color.parseColor("#FF0000"))
