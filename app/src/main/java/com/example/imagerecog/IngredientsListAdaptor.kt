@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.imagerecog.R.layout.item_ingredient
 
 class IngredientsListAdaptor(private val items: ArrayList<String>, private val listener:IngredientItemClicked): RecyclerView.Adapter<IngredientsViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_ingredient, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(item_ingredient, parent, false)
         val viewHolder = IngredientsViewHolder(view)
         view.setOnClickListener{
             listener.onItemClicked(items[viewHolder.adapterPosition])
@@ -24,13 +25,17 @@ class IngredientsListAdaptor(private val items: ArrayList<String>, private val l
         val currentItem2=currentItem.replace("\\s".toRegex(), "")
         val rating:Int= com.example.ingredientanalyzer.Ingredients.value(currentItem2)
         if (rating>5){
-            holder.titleView.setBackgroundColor(Color.parseColor("#00FF00"))
+          //  holder.titleView.setBackgroundColor(Color.parseColor("#00FF00"))
+            holder.titleView.setTextColor(Color.parseColor("#00FF00"))
         }
         else if(rating<5){
-            holder.titleView.setBackgroundColor(Color.parseColor("#FF0000"))
+           // holder.titleView.setBackgroundColor(Color.parseColor("#DC143C"))
+            holder.titleView.setTextColor(Color.parseColor("#DC143C"))
+
         }
         else {
-            holder.titleView.setBackgroundColor(Color.parseColor("#FF5722"))
+          //  holder.titleView.setBackgroundColor(Color.parseColor("#E9967A"))
+         holder.titleView.setTextColor(Color.parseColor("white"))
         }
 
     }

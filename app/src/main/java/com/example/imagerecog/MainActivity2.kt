@@ -106,7 +106,7 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
                 ratingText.text = "${rating+1}/10"
             }
             else{
-                Toast.makeText( this@MainActivity2, "Please enter a message.", Toast.LENGTH_LONG).show()
+                Toast.makeText( this@MainActivity2, "No Ingredients Detected,Try Again", Toast.LENGTH_LONG).show()
             }
 
         }, 1000)

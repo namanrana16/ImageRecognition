@@ -1,9 +1,9 @@
  package com.example.imagerecog
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.appcompat.app.AppCompatActivity
 
 
  class SplashScreen : AppCompatActivity() {
@@ -17,7 +17,7 @@ import android.os.Handler
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
-        }, 3000)
+        }, 1000)
 
 
 

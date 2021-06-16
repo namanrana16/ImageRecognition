@@ -13,11 +13,9 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
 import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
-import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -256,6 +254,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ImageCaptured::class.java)
         intent.putExtra("imageUri", savedUri);
         startActivity(intent)
+        this.finish()
     }
 
 

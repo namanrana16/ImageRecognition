@@ -5,20 +5,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/wheat"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/camera_capture_button"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:backgroundTint="#eb5e0b"
-
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/blue_violet"
+        android:textSize="25sp"
+        android:textStyle="bold"
         android:elevation="2dp"
         android:text="@string/take_photo"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingVertical="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:background="@drawable/custom_button"
 
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -26,7 +29,7 @@
         android:id="@+id/viewFinder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="100dp">
+        >
 
 
     </androidx.camera.view.PreviewView>
