@@ -18,6 +18,6 @@
         app:layout_constraintRight_toRightOf="parent"
         android:fontFamily="@font/couturebld"
         android:textSize="40dp"
-        android:textColor="#f0c38e"/>
+        android:textColor="@color/lawn_green"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

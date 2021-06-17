@@ -2,28 +2,24 @@ package com.example.imagerecog
 
 
 
+
 import android.app.ProgressDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.TextUtils
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.ingredientanalyzer.Ingredients
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main2.*
+import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
-import java.text.DecimalFormat
-import android.text.TextUtils
-import android.util.Log
-import kotlinx.android.synthetic.main.activity_main.*
-import org.tensorflow.lite.Interpreter
-import java.util.*
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 
@@ -51,7 +47,7 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
 
         recyclerView.layoutManager= LinearLayoutManager(this)
         var finallist:String=""
-       // var avg:Float= 0F
+        // var avg:Float= 0F
         for (i in list){
             finallist+=i
             finallist+=" "
@@ -72,45 +68,45 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
 
         var flag:Int = 0
         //avg/=list.size
-       // var df = DecimalFormat("#.##")
-       // avg=df.format(avg).toFloat()
-    //    tfLiteInterpreter = Interpreter( loadModelFile() )
+        // var df = DecimalFormat("#.##")
+        // avg=df.format(avg).toFloat()
+        //    tfLiteInterpreter = Interpreter( loadModelFile() )
 
-            tfLiteInterpreter = Interpreter( loadModelFile() )
+        tfLiteInterpreter = Interpreter( loadModelFile() )
 
-            // Start vocab processing, show a ProgressDialog to the user.
-            val progressDialog = ProgressDialog( this )
-            progressDialog.setMessage( "Parsing word_dict.json ..." )
-            progressDialog.setCancelable( false )
-            progressDialog.show()
-            classifier.processVocab( object: Classifier.VocabCallback {
-                override fun onVocabProcessed() {
-                    // Processing done, dismiss the progressDialog.
-                    flag=1
-                    progressDialog.dismiss()
-                }
-            })
+        // Start vocab processing, show a ProgressDialog to the user.
+        val progressDialog = ProgressDialog( this )
+        progressDialog.setMessage( "Parsing word_dict.json ..." )
+        progressDialog.setCancelable( false )
+        progressDialog.show()
+        classifier.processVocab( object: Classifier.VocabCallback {
+            override fun onVocabProcessed() {
+                // Processing done, dismiss the progressDialog.
+                flag=1
+                progressDialog.dismiss()
+            }
+        })
 
 
         Handler(Looper.getMainLooper()).postDelayed({
             val adaptor= IngredientsListAdaptor(list, this)
-            val ratingText=findViewById<TextView>(R.id.ratingValue)
+            val ratingText=findViewById<TextView>(R.id.ratingText)
             recyclerView.adapter=adaptor
 
             if ( !TextUtils.isEmpty( inputListFinal ) ){
                 // Tokenize and pad the given input text.
-                    Log.i("FINALLLL", inputListFinal)
+                Log.i("FINALLLL", inputListFinal)
                 val tokenizedMessage = classifier.tokenize( inputListFinal )
                 val paddedMessage = classifier.padSequence( tokenizedMessage )
 
                 val results = classifySequence( paddedMessage )
                 val rating  = results.indexOf(results.max()!!)
                 Toast.makeText(this,inputListFinal,Toast.LENGTH_LONG
-                    ).show()
+                ).show()
                 ratingText.text = "${rating+1}/10"
             }
             else{
-                Toast.makeText( this@MainActivity2, "Please enter a message.", Toast.LENGTH_LONG).show()
+                Toast.makeText( this@MainActivity2, "No Ingredients Detected,Try Again", Toast.LENGTH_LONG).show()
             }
 
         }, 1000)
@@ -118,20 +114,20 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
 
 
 
-      /*  for (i in list) {
-            Toast.makeText(baseContext, "I found $i", Toast.LENGTH_SHORT).show()
-        }*/
-      //  val items = fetchData()
+        /*  for (i in list) {
+              Toast.makeText(baseContext, "I found $i", Toast.LENGTH_SHORT).show()
+          }*/
+        //  val items = fetchData()
 
 
 
-     //   ratingText.text="$avg/10"
-     /*   if (avg>5){
-            ratingText.setTextColor(Color.parseColor("#00FF00"))
-        }
-        else {
-            ratingText.setTextColor(Color.parseColor("#FF0000"))
-        }*/
+        //   ratingText.text="$avg/10"
+        /*   if (avg>5){
+               ratingText.setTextColor(Color.parseColor("#00FF00"))
+           }
+           else {
+               ratingText.setTextColor(Color.parseColor("#FF0000"))
+           }*/
 
 
     }

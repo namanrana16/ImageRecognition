@@ -24,7 +24,7 @@ class ImageCaptured : AppCompatActivity() {
 
         val image: InputImage = InputImage.fromFilePath(applicationContext, savedUri)
 
-        var photo=findViewById<ImageView>(R.id.photo)
+        val photo=findViewById<ImageView>(R.id.photo)
         photo.setImageURI(savedUri)
 
         val recognizer = TextRecognition.getClient()
@@ -168,6 +168,7 @@ class ImageCaptured : AppCompatActivity() {
 
     fun confirm(view: View) {
         list()
+        this.finish()
     }
     fun retake(view: View) {
         val intent = Intent(this, MainActivity::class.java)
@@ -180,6 +181,7 @@ class ImageCaptured : AppCompatActivity() {
             }
         }
         startActivity(intent)
+
     }
 
 
