@@ -22,20 +22,23 @@ class IngredientsListAdaptor(private val items: ArrayList<String>, private val l
     override fun onBindViewHolder(holder: IngredientsViewHolder, position: Int) {
         val currentItem=items[position]
         holder.titleView.text=currentItem
+
         val currentItem2=currentItem.replace("\\s".toRegex(), "")
         val rating:Int= com.example.ingredientanalyzer.Ingredients.value(currentItem2)
         if (rating>5){
           //  holder.titleView.setBackgroundColor(Color.parseColor("#00FF00"))
-            holder.titleView.setTextColor(Color.parseColor("#00FF00"))
+            holder.titleView.setTextColor(Color.parseColor("#34FE3C"))
+
         }
         else if(rating<5){
            // holder.titleView.setBackgroundColor(Color.parseColor("#DC143C"))
-            holder.titleView.setTextColor(Color.parseColor("#DC143C"))
+            holder.titleView.setTextColor(Color.parseColor("#FE3434"))
 
         }
         else {
           //  holder.titleView.setBackgroundColor(Color.parseColor("#E9967A"))
-         holder.titleView.setTextColor(Color.parseColor("white"))
+         holder.titleView.setTextColor(Color.parseColor("#FEAD34"))
+
         }
 
     }

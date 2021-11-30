@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#312c51"
+    android:background="#8C34AB"
     android:layout_height="match_parent"
     tools:context=".SplashScreen">
 
@@ -18,6 +18,6 @@
         app:layout_constraintRight_toRightOf="parent"
         android:fontFamily="@font/couturebld"
         android:textSize="40dp"
-        android:textColor="@color/lawn_green"/>
+        android:textColor="#FF1FE9"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

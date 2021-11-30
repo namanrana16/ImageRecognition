@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wheat"
+    android:background="#8C34AB"
     tools:context=".MainActivity2">
 
 
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/Rating"
         android:text="RATING"
-        android:textColor="#4CAF50"
+        android:textColor="#FFFF"
         android:fontFamily="sans-serif-black"
         android:textSize="30sp"
         android:gravity="center"
@@ -31,7 +31,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="5dp"
         android:id="@+id/ratingText"
-        android:textColor="#4CAF50"
+
         android:fontFamily="sans-serif-black"
         android:textSize="30sp"
         android:gravity="center"
@@ -40,16 +40,16 @@
         app:layout_constraintBottom_toTopOf="@id/Ingredients"/>
 
     <TextView
+        android:id="@+id/Ingredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Ingredients"
+        android:layout_marginTop="8dp"
+
         android:fontFamily="sans-serif-black"
- 
         android:text="@string/ingredients"
-        android:layout_marginTop="10dp"
-        android:textColor="#eb5e0b"
+        android:textColor="#FFF"
         android:textSize="32sp"
-       
+
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintStart_toStartOf="parent"

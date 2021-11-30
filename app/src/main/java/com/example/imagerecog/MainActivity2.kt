@@ -4,6 +4,7 @@ package com.example.imagerecog
 
 
 import android.app.ProgressDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -101,9 +102,16 @@ class MainActivity2 : AppCompatActivity(), IngredientItemClicked {
 
                 val results = classifySequence( paddedMessage )
                 val rating  = results.indexOf(results.max()!!)
-                Toast.makeText(this,inputListFinal,Toast.LENGTH_LONG
-                ).show()
+//                Toast.makeText(this,inputListFinal,Toast.LENGTH_LONG
+//                ).show()
+
                 ratingText.text = "${rating+1}/10"
+
+              if(rating>=5)
+                    ratingText.setTextColor(Color.parseColor("#34FE3C"))
+                else if(rating<5)
+                    ratingText.setTextColor(Color.parseColor("#FE3434"))
+
             }
             else{
                 Toast.makeText( this@MainActivity2, "No Ingredients Detected,Try Again", Toast.LENGTH_LONG).show()

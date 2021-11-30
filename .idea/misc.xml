@@ -3,11 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/ImageRecog/app/src/main/res/drawable/corner.xml" value="0.14739583333333334" />
+        <entry key="..\:/Projects/ImageRecog/app/src/main/res/drawable/custom_button.xml" value="0.14739583333333334" />
+        <entry key="..\:/Projects/ImageRecog/app/src/main/res/drawable/widget_view.xml" value="0.26615384615384613" />
+        <entry key="..\:/Projects/ImageRecog/app/src/main/res/layout/activity_image_captured.xml" value="0.13125" />
         <entry key="..\:/Projects/ImageRecog/app/src/main/res/layout/activity_main.xml" value="0.12760416666666666" />
+        <entry key="..\:/Projects/ImageRecog/app/src/main/res/layout/activity_main2.xml" value="0.152" />
+        <entry key="..\:/Projects/ImageRecog/app/src/main/res/layout/activity_splash_screen.xml" value="0.13125" />
+        <entry key="..\:/Projects/ImageRecog/app/src/main/res/layout/item_ingredient.xml" value="0.3213166144200627" />
+        <entry key="..\:/Projects/ImageRecog/app/src/main/res/layout/widget_view.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
